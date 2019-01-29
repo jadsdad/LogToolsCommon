@@ -6,12 +6,38 @@ from pathlib import Path
 conn = mariadb.connect(db='catalogue', use_unicode=True, charset='utf8', read_default_file='~/.my.cnf')
 basedir = str(Path.home()) + "/Charts"
 
+def total_albums():
+    sql = "SELECT COUNT(albumid) FROM album where SourceID<>6;"
+    results = get_results(sql)
+    return results[0][0]
+
+def total_artists():
+    sql = "SELECT COUNT(artistid) FROM artist;"
+    results = get_results(sql)
+    return results[0][0]
+
 def get_results(sql):
     c = conn.cursor()
     c.execute(sql)
     results = c.fetchall()
     return results
 
+def total_albums_played():
+    sql = "SELECT SUM(played) FROM album where sourceid<>6;"
+    results = get_results(sql)
+    return results[0][0]
+
+def total_time():
+    sql = "SELECT SUM(tracklength) FROM tracklengths inner join album on tracklengths.albumid = album.albumid " \
+          "where album.sourceid<>6;"
+    results = get_results(sql)
+    return results[0][0]
+
+def total_excl_bonus():
+    sql = "SELECT SUM(tracklength) FROM tracklengths inner join album on tracklengths.albumid = album.albumid " \
+          "where album.sourceid<> 6 and BonusTrack = 0;"
+    results = get_results(sql)
+    return results[0][0]
 
 def execute_sql(sql):
     cursor = conn.cursor()
