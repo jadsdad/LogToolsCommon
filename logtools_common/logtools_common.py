@@ -6,6 +6,10 @@ from pathlib import Path
 conn = mariadb.connect(db='catalogue', use_unicode=True, charset='utf8', read_default_file='~/.my.cnf')
 basedir = str(Path.home()) + "/Charts"
 
+def add_chart_history(Y, Q, artistid, albumid, rank, score, tyr):
+    sql = "INSERT INTO chart_history VALUES ({}, {}, {}, {}, {}, {}, {});".format(Y, Q, artistid, albumid, rank, score, tyr)
+    execute_sql(sql)
+
 def total_albums():
     sql = "SELECT COUNT(albumid) FROM album where SourceID<>6;"
     results = get_results(sql)
