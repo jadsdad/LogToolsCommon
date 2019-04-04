@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='LogToolsCommon',
-    version='1.0.3',
+    version='1.0.4',
     packages=['logtools_common'],
     url='',
     license='',
